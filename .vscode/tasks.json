@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compilar Flex + Bison",
+      "type": "shell",
+      "command": "${workspaceFolder}\\build.bat",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Ejecutar compilador",
+      "type": "shell",
+      "command": ".\\compilador.exe",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

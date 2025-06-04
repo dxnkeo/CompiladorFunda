@@ -1,0 +1,16 @@
+numeta edad;
+edad tiene 18;
+
+suelta_la_voz(edad);
+
+la_ura (edad iwal_que 18) {
+  suelta_la_voz(1);
+} en_vola {
+  suelta_la_voz(0);
+}
+
+la_ura (edad iwal_que 99) {
+  suelta_la_voz(99);
+} en_vola {
+  suelta_la_voz(2);
+}
