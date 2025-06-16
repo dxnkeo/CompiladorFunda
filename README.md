@@ -135,6 +135,7 @@ suelta_la_voz(saludo);
 build.bat
 ```
 
+Se ejecuta con Ctrl+Mayús+B.
 Este script genera el ejecutable `compilador.exe`.
 
 ### Ejecución
@@ -142,14 +143,6 @@ Este script genera el ejecutable `compilador.exe`.
 ```bash
 compilador < entrada.txt
 ```
-
-O bien de forma interactiva:
-
-```bash
-compilador
-```
-
-Finaliza entrada con `Ctrl+Z` en Windows.
 
 ---
 
@@ -171,7 +164,3 @@ Este proyecto permite entender cómo funcionan los compiladores a bajo nivel. In
 Todo con un toque de humor para mantener el aprendizaje entretenido.
 
 ---
-
-## Licencia
-
-Este proyecto fue desarrollado con fines educativos y puede reutilizarse libremente para proyectos académicos.
