@@ -1,9 +1,10 @@
-# Compilador FLAITE
+# Compilador "Flaite"
 
 Taller de Fundamentos de Ciencias de la Computación
-Autores:
-Adrián Elgueta. 21.464.061-9
-Paula Núñez. 21.145.637-K
+
+# Integrantes:
+- Adrián Elgueta. 21.464.061-9
+- Paula Núñez. 21.145.637-K
 
 Lenguaje desarrollado con **Flex**, **Bison** y **C++**
 
@@ -93,13 +94,13 @@ Valida que:
 
 ## Características del lenguaje
 
-- ✅ Declaración y uso de enteros (`numeta`)
-- ✅ Declaración y uso de strings (`palabrita`)
-- ✅ Impresión de variables y literales (`suelta_la_voz`)
-- ✅ Entrada por teclado (`sapeate`)
-- ✅ Condicionales `if`/`else` (`la_ura` / `en_vola`)
-- ✅ Bucle `while` (`al_toke`)
-- ✅ Operaciones aritméticas y comparativas
+- Declaración y uso de enteros (`numeta`)
+- Declaración y uso de strings (`palabrita`)
+- Impresión de variables y literales (`suelta_la_voz`)
+- Entrada por teclado (`sapeate`)
+- Condicionales `if`/`else` (`la_ura` / `en_vola`)
+- Bucle `while` (`al_toke`)
+- Operaciones aritméticas y comparativas
 
 ---
 
