@@ -1,16 +1,31 @@
+palabrita saludo;
+saludo tiene "Hola flaite!";
+
 numeta edad;
 edad tiene 18;
 
+suelta_la_voz("Probando impresiones:");
+suelta_la_voz(saludo);
 suelta_la_voz(edad);
 
-la_ura (edad iwal_que 18) {
-  suelta_la_voz(1);
+la_ura (edad == 18) {
+  suelta_la_voz("Eres mayor de edad");
 } en_vola {
-  suelta_la_voz(0);
+  suelta_la_voz("No eres mayor de edad");
 }
 
-la_ura (edad iwal_que 99) {
-  suelta_la_voz(99);
+edad tiene 15;
+
+la_ura (edad == 18) {
+  suelta_la_voz("Eres mayor de edad");
 } en_vola {
-  suelta_la_voz(2);
+  suelta_la_voz("No eres mayor de edad");
+}
+
+numeta contador;
+contador tiene 0;
+
+al_toke (contador < 3) {
+  suelta_la_voz(contador);
+  contador tiene contador + 1;
 }

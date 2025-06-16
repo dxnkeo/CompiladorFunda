@@ -1,116 +1,141 @@
+%define parse.trace
+
 %{
 #include <iostream>
 #include <string>
 #include <map>
-#include <cstdlib>
-using namespace std;
+#include <memory>
+#include "ast.hpp"
 
 int yylex();
-void yyerror(const char* s);
+void yyerror(const char* s) {
+    std::cerr << "Error FLAITEEE: " << s << std::endl;
+}
 
-// Mapa para almacenar variables
-map<string, int> variables;
+std::map<std::string, int> variables;
+std::map<std::string, std::string> string_vars;
+
+std::map<std::string, bool> symbol_types;  // true = string, false = int
+
+
+std::unique_ptr<ASTNode> root;
 %}
+
+%code requires {
+  #include "ast.hpp"
+}
+
 
 %union {
     int ival;
     float fval;
     char* sval;
+    ASTNode* node;
+    StatementListNode* stmt_list;
+    ExpressionNode* expr;
 }
 
 %token <ival> NUM_LITERAL
-%token <fval> DECIMAL_LITERAL
-%token <sval> STRING_LITERAL ID
+%token <sval> ID STRING_LITERAL
 
-// Palabras clave
-%token NUMETA DECIMA PALABRITA
-%token LA_URA EN_VOLA AL_TOKE
-%token SAPEATE SUELTA_LA_VOZ
 
-// Operadores
-%token EQ NEQ LEQ GEQ LT GT
-%token PLUS MINUS MULT DIV
-%token ASSIGN
-%token SEMICOLON LBRACE RBRACE LPAREN RPAREN
-%token ERROR
+%token NUMETA SUELTA_LA_VOZ LA_URA EN_VOLA AL_TOKE ASSIGN SEMICOLON LPAREN RPAREN LBRACE RBRACE EQ PLUS MINUS MULT DIV ERROR
+%token NEQ LEQ GEQ LT GT
+%token SAPEATE
+%token PALABRITA
 
-%type <ival> expression
-%type <ival> statement
-%type <ival> statement_list
+
+%type <node> statement
+%type <stmt_list> statement_list
+%type <expr> expression
 
 %start program
 
 %%
 
 program:
-    statement_list
+    statement_list {
+        root.reset($1);
+        
+    }
 ;
 
 statement_list:
-    statement_list statement
-  | statement
+    statement_list statement {
+        $1->add($2);
+        $$ = $1;
+    }
+  | statement {
+        $$ = new StatementListNode();
+        $$->add($1);
+    }
 ;
 
 statement:
-    NUMETA ID SEMICOLON
-        { variables[$2] = 0; }
+    NUMETA ID SEMICOLON {
+    symbol_types[$2] = false;  // int
+    $$ = new DeclarationNode($2);
+    }
 
-  | ID ASSIGN expression SEMICOLON
-        { variables[$1] = $3; }
+  | ID ASSIGN expression SEMICOLON {
+        $$ = new AssignmentNode($1, $3);
+    }
 
-  | SUELTA_LA_VOZ LPAREN expression RPAREN SEMICOLON
-        { cout << $3 << endl; }
+  | LA_URA LPAREN expression RPAREN LBRACE statement_list RBRACE EN_VOLA LBRACE statement_list RBRACE {
+        $$ = new IfElseNode($3, $6, $10);
+    }
+  | AL_TOKE LPAREN expression RPAREN LBRACE statement_list RBRACE {
+        $$ = new WhileNode($3, $6);
+    }
+    
+  | SAPEATE LPAREN ID RPAREN SEMICOLON {
+        $$ = new InputNode($3);
+    }
 
-  | SAPEATE LPAREN ID RPAREN SEMICOLON
-        {
-            cout << "Ingresa valor para " << $3 << ": ";
-            cin >> variables[$3];
-        }
+  | PALABRITA ID SEMICOLON {
+    symbol_types[$2] = true;  // string
+    $$ = new DeclareStringNode($2);
+    }
 
-  // IF sin else
-  | LA_URA LPAREN expression RPAREN LBRACE statement_list RBRACE
-        {
-            if ($3) {
-                // ejecutar bloque if
-            }
-        }
+    
+  | SUELTA_LA_VOZ LPAREN expression RPAREN SEMICOLON {
+    $$ = new PrintNode($3);
+    }
 
-  // IF con else
-  | LA_URA LPAREN expression RPAREN LBRACE statement_list RBRACE EN_VOLA LBRACE statement_list RBRACE
-        {
-            if ($3) {
-                // solo bloque if
-            } else {
-                // solo bloque else
-            }
-        }
 
-  // WHILE loop
-  | AL_TOKE LPAREN expression RPAREN LBRACE statement_list RBRACE
-        {
-            while ($3) {
-                // bucle ejecuta instrucciones internas
-            }
-        }
+    // asignar string literal a variable
+  | ID ASSIGN STRING_LITERAL SEMICOLON {
+    $$ = new AssignStringNode($1, $3); // también lo implementas
+    }
+
 ;
 
 expression:
-    expression PLUS expression        { $$ = $1 + $3; }
-  | expression MINUS expression       { $$ = $1 - $3; }
-  | expression MULT expression        { $$ = $1 * $3; }
-  | expression DIV expression         { $$ = $1 / $3; }
-  | expression EQ expression          { $$ = $1 == $3; }
-  | expression NEQ expression         { $$ = $1 != $3; }
-  | expression LT expression          { $$ = $1 < $3; }
-  | expression LEQ expression         { $$ = $1 <= $3; }
-  | expression GT expression          { $$ = $1 > $3; }
-  | expression GEQ expression         { $$ = $1 >= $3; }
-  | NUM_LITERAL                       { $$ = $1; }
-  | ID                                { $$ = variables[$1]; }
+    expression PLUS expression { $$ = new BinaryOpNode("+", $1, $3); }
+  | expression MINUS expression { $$ = new BinaryOpNode("-", $1, $3); }
+  | expression MULT expression { $$ = new BinaryOpNode("*", $1, $3); }
+  | expression DIV expression { $$ = new BinaryOpNode("/", $1, $3); }
+  | expression EQ expression { $$ = new BinaryOpNode("==", $1, $3); }
+  | NUM_LITERAL { $$ = new NumberNode($1); }
+  | ID {
+    if (symbol_types.count($1) && symbol_types[$1]) {
+        $$ = new VariableNode($1, true);  // string
+    } else {
+        $$ = new VariableNode($1, false); // int
+        }
+    }
+
+
+  | STRING_LITERAL {
+        $$ = new StringNode($1);  // string literal directo
+    }
+
+  | expression NEQ expression { $$ = new BinaryOpNode("!=", $1, $3); }
+  | expression LT expression  { $$ = new BinaryOpNode("<", $1, $3); }
+  | expression LEQ expression { $$ = new BinaryOpNode("<=", $1, $3); }
+  | expression GT expression  { $$ = new BinaryOpNode(">", $1, $3); }
+  | expression GEQ expression { $$ = new BinaryOpNode(">=", $1, $3); }
+
 ;
 
 %%
-
-void yyerror(const char *s) {
-    cerr << "Error flaite: " << s << endl;
-}

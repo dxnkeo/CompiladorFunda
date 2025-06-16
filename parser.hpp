@@ -39,11 +39,17 @@
 # define YY_YY_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 24 "parser.y"
+
+  #include "ast.hpp"
+
+#line 53 "parser.hpp"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -55,34 +61,32 @@ extern int yydebug;
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
     NUM_LITERAL = 258,             /* NUM_LITERAL  */
-    DECIMAL_LITERAL = 259,         /* DECIMAL_LITERAL  */
+    ID = 259,                      /* ID  */
     STRING_LITERAL = 260,          /* STRING_LITERAL  */
-    ID = 261,                      /* ID  */
-    NUMETA = 262,                  /* NUMETA  */
-    DECIMA = 263,                  /* DECIMA  */
-    PALABRITA = 264,               /* PALABRITA  */
-    LA_URA = 265,                  /* LA_URA  */
-    EN_VOLA = 266,                 /* EN_VOLA  */
-    AL_TOKE = 267,                 /* AL_TOKE  */
-    SAPEATE = 268,                 /* SAPEATE  */
-    SUELTA_LA_VOZ = 269,           /* SUELTA_LA_VOZ  */
-    EQ = 270,                      /* EQ  */
-    NEQ = 271,                     /* NEQ  */
-    LEQ = 272,                     /* LEQ  */
-    GEQ = 273,                     /* GEQ  */
-    LT = 274,                      /* LT  */
-    GT = 275,                      /* GT  */
-    PLUS = 276,                    /* PLUS  */
-    MINUS = 277,                   /* MINUS  */
-    MULT = 278,                    /* MULT  */
-    DIV = 279,                     /* DIV  */
-    ASSIGN = 280,                  /* ASSIGN  */
-    SEMICOLON = 281,               /* SEMICOLON  */
-    LBRACE = 282,                  /* LBRACE  */
-    RBRACE = 283,                  /* RBRACE  */
-    LPAREN = 284,                  /* LPAREN  */
-    RPAREN = 285,                  /* RPAREN  */
-    ERROR = 286                    /* ERROR  */
+    NUMETA = 261,                  /* NUMETA  */
+    SUELTA_LA_VOZ = 262,           /* SUELTA_LA_VOZ  */
+    LA_URA = 263,                  /* LA_URA  */
+    EN_VOLA = 264,                 /* EN_VOLA  */
+    AL_TOKE = 265,                 /* AL_TOKE  */
+    ASSIGN = 266,                  /* ASSIGN  */
+    SEMICOLON = 267,               /* SEMICOLON  */
+    LPAREN = 268,                  /* LPAREN  */
+    RPAREN = 269,                  /* RPAREN  */
+    LBRACE = 270,                  /* LBRACE  */
+    RBRACE = 271,                  /* RBRACE  */
+    EQ = 272,                      /* EQ  */
+    PLUS = 273,                    /* PLUS  */
+    MINUS = 274,                   /* MINUS  */
+    MULT = 275,                    /* MULT  */
+    DIV = 276,                     /* DIV  */
+    ERROR = 277,                   /* ERROR  */
+    NEQ = 278,                     /* NEQ  */
+    LEQ = 279,                     /* LEQ  */
+    GEQ = 280,                     /* GEQ  */
+    LT = 281,                      /* LT  */
+    GT = 282,                      /* GT  */
+    SAPEATE = 283,                 /* SAPEATE  */
+    PALABRITA = 284                /* PALABRITA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -91,13 +95,16 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 15 "parser.y"
+#line 29 "parser.y"
 
     int ival;
     float fval;
     char* sval;
+    ASTNode* node;
+    StatementListNode* stmt_list;
+    ExpressionNode* expr;
 
-#line 101 "parser.hpp"
+#line 108 "parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;
