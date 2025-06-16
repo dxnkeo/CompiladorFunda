@@ -161,6 +161,6 @@ Este proyecto permite entender cómo funcionan los compiladores a bajo nivel. In
 - Construcción de AST
 - Evaluación de expresiones
 
-Todo con un toque de humor para mantener el aprendizaje entretenido.
+Todo con un toque de chispeza chilena.
 
 ---
