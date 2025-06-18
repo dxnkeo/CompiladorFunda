@@ -144,6 +144,12 @@ Este script genera el ejecutable `compilador.exe`.
 compilador < entrada.txt
 ```
 
+### O también
+
+```bash
+compilador.exe, luego "Ctrl + Z"
+```
+
 ---
 
 ## Observaciones
@@ -162,3 +168,6 @@ Este proyecto permite entender cómo funcionan los compiladores a bajo nivel. In
 - Evaluación de expresiones
 
 ---
+## Documentación
+
+- 📄 [Ver informe del compilador](./informe_compilador.pdf)
